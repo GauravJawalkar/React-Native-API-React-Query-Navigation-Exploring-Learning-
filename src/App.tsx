@@ -1,18 +1,16 @@
 import React from 'react'
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import MainScreen from './screens/MainScreen';
 import { SafeAreaView } from "react-native-safe-area-context";
-
-const queryClient = new QueryClient();
+import { ReactQueryProvider } from './lib/React-Query/Provider';
 
 const App = () => {
 
   return (
-    <QueryClientProvider client={queryClient}>
+    <ReactQueryProvider>
       <SafeAreaView className='flex-1'>
         <MainScreen />
       </SafeAreaView>
-    </QueryClientProvider>
+    </ReactQueryProvider>
   )
 }
 
