@@ -1,12 +1,11 @@
 import { View, Text, FlatList } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import axios from 'axios';
 import TodoCard, { TodoCardProps } from '../components/TodoCard';
 import { useQuery } from '@tanstack/react-query';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const MainScreen = () => {
-
-
     const fetchData = async () => {
         try {
             const response = await axios.get("https://jsonplaceholder.typicode.com/todos");
@@ -28,14 +27,16 @@ const MainScreen = () => {
         }
     )
     return (
-        <View className='bg-[#1a1a1a] flex justify-center items-center'>
-            <Text className='text-2xl uppercase text-orange-500 font-bold'>App</Text>
-            {isLoading ? (<Text className='text-white'>Loading....</Text>) : (<FlatList
-                data={data}
-                keyExtractor={(item: { id: number }) => item?.id.toString()}
-                renderItem={({ item }: { item: TodoCardProps }) => (<TodoCard todo={item} />)}
-            />)}
-        </View >
+        <SafeAreaView className='flex-1'>
+            <View className='bg-[#1a1a1a] flex justify-center items-center'>
+                <Text className='text-2xl uppercase text-orange-500 font-bold'>App</Text>
+                {isLoading ? (<Text className='text-white'>Loading....</Text>) : (<FlatList
+                    data={data}
+                    keyExtractor={(item: { id: number }) => item?.id.toString()}
+                    renderItem={({ item }: { item: TodoCardProps }) => (<TodoCard todo={item} />)}
+                />)}
+            </View >
+        </SafeAreaView>
     )
 }
 
