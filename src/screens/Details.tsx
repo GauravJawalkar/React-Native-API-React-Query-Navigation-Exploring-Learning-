@@ -1,24 +1,57 @@
-import { View, Text, TouchableOpacity } from 'react-native'
+import { View, FlatList, TouchableOpacity } from 'react-native'
 import React from 'react'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { RootStackParamList } from '../App'
-import { useNavigation } from '@react-navigation/native'
-import Products from '../components/Products'
+import ProductSkeleton from '../components/Skeletons/ProductSkeleton'
+import ProductCard from '../components/ProductCard'
+import axios from 'axios'
+import { useQuery } from '@tanstack/react-query'
 
 type DetailsScreenProps = NativeStackScreenProps<RootStackParamList, 'DetailsScreen'>
 
 const DetailsScreen = ({ navigation, route }: DetailsScreenProps) => {
-    const navigationn = useNavigation()
-    const { productId } = route?.params;
-    console.log("Params : ", productId);
+    async function getProduxts() {
+        try {
+            const response = await axios.get("https://fakestoreapi.com/products");
+            console.log("Products : ", response?.data);
+            if (response?.data) {
+                return response?.data;
+            }
+            return []
+        } catch (error) {
+            console.error("Error fetching the products : ", error);
+            return []
+        }
+    }
+
+    const { data: productData = [], isFetching, isLoading } = useQuery(
+        {
+            queryKey: ['products'],
+            queryFn: getProduxts,
+            refetchOnWindowFocus: false
+        }
+    )
+
     return (
-        <View className='flex-1 justify-center items-center'>
-            <Text className='text-2xl uppercase font-semibold leading-relaxed'>Details</Text>
-            <Text className='text-2xl uppercase font-semibold leading-relaxed'>The Product Id : {productId}</Text>
-            <TouchableOpacity className='mt-5 p-3 bg-blue-500 rounded text-white' onPress={() => { navigation.navigate("HomeScreen") }}>
-                <Text className='text-white'>Visit Your Todos</Text>
-            </TouchableOpacity>
-            <Products />
+        <View>
+            {(isFetching || isLoading) && (<FlatList
+                data={[1, 2, 3, 4, 5, 6]}
+                numColumns={2}
+                keyExtractor={(item) => item.toString()}
+                renderItem={() => (<ProductSkeleton />)}
+            />)}
+            {(!isLoading && !isFetching) &&
+                <FlatList
+                    numColumns={2}
+                    data={productData}
+                    keyExtractor={(item) => item?.id?.toString()}
+                    renderItem={({ item }) => (
+                        <TouchableOpacity onPress={() => { navigation.navigate("ProductDetailsScreen", { product: item }) }} activeOpacity={0.9}>
+                            <ProductCard data={item} />
+                        </TouchableOpacity>
+                    )}
+                />
+            }
         </View>
     )
 }
