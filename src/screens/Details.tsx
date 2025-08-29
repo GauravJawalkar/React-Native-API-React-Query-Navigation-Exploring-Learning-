@@ -3,6 +3,7 @@ import React from 'react'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { RootStackParamList } from '../App'
 import { useNavigation } from '@react-navigation/native'
+import Products from '../components/Products'
 
 type DetailsScreenProps = NativeStackScreenProps<RootStackParamList, 'DetailsScreen'>
 
@@ -17,6 +18,7 @@ const DetailsScreen = ({ navigation, route }: DetailsScreenProps) => {
             <TouchableOpacity className='mt-5 p-3 bg-blue-500 rounded text-white' onPress={() => { navigation.navigate("HomeScreen") }}>
                 <Text className='text-white'>Visit Your Todos</Text>
             </TouchableOpacity>
+            <Products />
         </View>
     )
 }
