@@ -3,6 +3,7 @@ import React from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { RootStackParamList } from '../App'
+import RecentlyViewed from '../components/RecentlyViewed'
 type HomeScreenProps = NativeStackScreenProps<RootStackParamList, 'HomeScreen'>
 
 const HomeScreen = ({ navigation }: HomeScreenProps) => {
@@ -15,6 +16,7 @@ const HomeScreen = ({ navigation }: HomeScreenProps) => {
             <TouchableOpacity className='mt-5 p-3 bg-blue-500 rounded text-white' onPress={() => { navigation.navigate("DetailsScreen", { productId: "2822" }) }}>
                 <Text className='text-white'>View Products</Text>
             </TouchableOpacity>
+            <RecentlyViewed />
         </SafeAreaView>
     )
 }

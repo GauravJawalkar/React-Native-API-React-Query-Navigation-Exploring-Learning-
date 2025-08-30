@@ -13,7 +13,6 @@ const DetailsScreen = ({ navigation, route }: DetailsScreenProps) => {
     async function getProduxts() {
         try {
             const response = await axios.get("https://fakestoreapi.com/products");
-            console.log("Products : ", response?.data);
             if (response?.data) {
                 return response?.data;
             }
@@ -46,7 +45,7 @@ const DetailsScreen = ({ navigation, route }: DetailsScreenProps) => {
                     data={productData}
                     keyExtractor={(item) => item?.id?.toString()}
                     renderItem={({ item }) => (
-                        <TouchableOpacity onPress={() => { navigation.navigate("ProductDetailsScreen", { product: item }) }} activeOpacity={0.9}>
+                        <TouchableOpacity onPress={() => { navigation.navigate("ProductDetailsScreen", { product: item }) }}>
                             <ProductCard data={item} />
                         </TouchableOpacity>
                     )}

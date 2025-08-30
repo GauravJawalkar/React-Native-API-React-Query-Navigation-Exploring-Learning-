@@ -1,4 +1,4 @@
-import { View, Text, Image, TouchableOpacity } from 'react-native'
+import { View, Text, Image } from 'react-native'
 import React from 'react'
 export interface ProductCardProps {
     id: number;
@@ -26,9 +26,6 @@ const ProductCard = ({ data }: { data: ProductCardProps }) => {
                     <View className="w-full mt-3 space-y-1">
                         <Text numberOfLines={1} className="text-lg font-semibold text-gray-800">
                             {data?.title}
-                        </Text>
-                        <Text numberOfLines={2} className="text-sm text-gray-500">
-                            {data?.description}
                         </Text>
                         <View className="flex-row justify-between items-center mt-2">
                             <Text className="text-base font-bold text-gray-900">

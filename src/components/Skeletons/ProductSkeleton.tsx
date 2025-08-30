@@ -6,15 +6,11 @@ const ProductSkeleton = () => {
         <View className="w-52 bg-white rounded-2xl shadow-lg m-2 overflow-hidden">
             <View className="p-2 flex items-center">
                 {/* Image Skeleton */}
-                <View className="w-32 h-32 rounded-lg bg-gray-100" />
+                <View className="w-full h-32 rounded-lg bg-gray-100" />
 
                 {/* Title Skeleton */}
                 <View className="w-full mt-3 space-y-1">
                     <View className="h-6 bg-gray-100 rounded-md" />
-
-                    {/* Description Skeleton */}
-                    <View className="h-4 mt-2 bg-gray-100 rounded-t-md rounded-br-md" />
-                    <View className="h-2.5 w-3/4 bg-gray-100 rounded-b-md" />
 
                     {/* Price and Rating Skeleton */}
                     <View className="flex-row justify-between items-center mt-2">

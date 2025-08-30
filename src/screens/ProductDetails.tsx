@@ -1,14 +1,50 @@
 import { View, Text, Image, ScrollView, TouchableOpacity } from 'react-native'
-import React from 'react'
-import { ArrowLeftIcon, ShoppingCartIcon, StarIcon } from 'lucide-react-native'
+import React, { useEffect, useState } from 'react'
+import { ShoppingCartIcon, StarIcon } from 'lucide-react-native'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { RootStackParamList } from '../App'
 import { SafeAreaView } from 'react-native-safe-area-context'
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import { ProductCardProps } from '../components/ProductCard'
 
 type ProductDetailsScreenProps = NativeStackScreenProps<RootStackParamList, 'ProductDetailsScreen'>
 
 const ProductDetails = ({ route }: ProductDetailsScreenProps) => {
     const { product } = route?.params;
+
+    const saveProductToAsyncStorage = async (newProduct: ProductCardProps[]) => {
+        try {
+            await AsyncStorage.setItem('recentlyViewedProducts', JSON.stringify(newProduct));
+        } catch (error) {
+            console.error("Error Saving the data to async storage : ", error)
+        }
+    }
+
+    const addToRecentViewed = async () => {
+        if (!product) return;
+        try {
+            const existingProducts = await AsyncStorage.getItem('recentlyViewedProducts');
+            let parsedProducts: ProductCardProps[] = [];
+            if (existingProducts) {
+                const parsed = JSON.parse(existingProducts);
+                parsedProducts = Array.isArray(parsed) ? parsed : [];
+            }
+
+            const checkIfProductExists = parsedProducts?.some((item: ProductCardProps) => item?.id === product?.id);
+            if (checkIfProductExists) return;
+            const addNewProduct = [...parsedProducts, product];
+            await saveProductToAsyncStorage(addNewProduct);
+        } catch (error) {
+            console.error("Error Saving the data to async storage : ", error)
+        }
+    }
+
+
+
+    useEffect(() => {
+        addToRecentViewed();
+    }, [product?.id])
+
     return (
         <SafeAreaView className="flex-1 bg-white">
 
@@ -57,7 +93,7 @@ const ProductDetails = ({ route }: ProductDetailsScreenProps) => {
                     {/* Description */}
                     <View className="mt-6">
                         <Text className="text-lg font-semibold text-gray-900 mb-2">
-                            Description
+                            Additional Information
                         </Text>
                         <Text className="text-gray-600 leading-6">
                             {product?.description}
@@ -69,7 +105,10 @@ const ProductDetails = ({ route }: ProductDetailsScreenProps) => {
             {/* Bottom Add to Cart Button */}
             <View className="p-4 border-t border-gray-200">
                 <TouchableOpacity className="w-full bg-blue-600 py-4 rounded-full items-center">
-                    <Text className="text-white font-bold text-lg">Add to Cart</Text>
+                    <View className="text-white font-bold text-lg flex items-center justify-center gap-2 flex-row">
+                        <ShoppingCartIcon size={20} color="#fbbf24" />
+                        <Text className='text-white'>Add to Cart</Text>
+                    </View>
                 </TouchableOpacity>
             </View>
         </SafeAreaView>
